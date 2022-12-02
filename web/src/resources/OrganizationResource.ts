@@ -1,6 +1,10 @@
 import {AxiosError, AxiosResponse} from 'axios';
 import axios from 'src/libs/axios';
-import {assertHttpCode, BulkOperationError} from './ErrorHandling';
+import {
+  assertHttpCode,
+  BulkOperationError,
+  ResourceError,
+} from './ErrorHandling';
 
 export interface IAvatar {
   name: string;

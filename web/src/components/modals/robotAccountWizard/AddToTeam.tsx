@@ -1,20 +1,4 @@
 import {
-  TableComposable,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from '@patternfly/react-table';
-import {
-  PageSection,
-  PanelFooter,
-  ToggleGroup,
-  ToggleGroupItem,
-  ToggleGroupItemProps,
-  Toolbar,
-  ToolbarContent,
-  ToolbarItem,
   DropdownItem,
   Button,
   Text,
@@ -25,16 +9,16 @@ import React, {useEffect, useState} from 'react';
 import {DesktopIcon} from '@patternfly/react-icons';
 import ToggleDrawer from 'src/components/ToggleDrawer';
 import NameAndDescription from 'src/components/modals/robotAccountWizard/NameAndDescription';
-import {useTeams} from 'src/hooks/useTeams';
 import {addDisplayError} from 'src/resources/ErrorHandling';
 import TeamView from './TeamView';
+import { useCreateTeam } from 'src/hooks/UseTeams';
 
 export default function AddToTeam(props: AddToTeamProps) {
   const [newTeamName, setNewTeamName] = useState('');
   const [newTeamDescription, setNewTeamDescription] = useState('');
   const [err, setErr] = useState<string>();
 
-  const {createNewTeamHook} = useTeams(props.namespace);
+  const {createNewTeamHook} = useCreateTeam(props.namespace);
 
   const createNewTeam = () => {
     props.setDrawerExpanded(true);
@@ -58,8 +42,7 @@ export default function AddToTeam(props: AddToTeamProps) {
   const onCreateNewTeam = async () => {
     try {
       await createNewTeamHook({
-        namespace: props.namespace,
-        name: newTeamName,
+        teamName: newTeamName,
         description: newTeamDescription,
       }).then(function () {
         setNewTeamName('');

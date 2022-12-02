@@ -10,6 +10,26 @@ import {
 } from 'src/resources/RobotsResource';
 import {updateTeamForRobot} from 'src/resources/TeamResources';
 
+export function useFetchRobotAccounts(orgName: string) {
+  const {
+    data: robots,
+    isLoading,
+    error,
+  } = useQuery(
+    ['robots'],
+    ({signal}) => fetchRobotsForNamespace(orgName, false, signal),
+    {
+      placeholderData: [],
+    },
+  );
+
+  return {
+    error,
+    loading: isLoading,
+    robots,
+  };
+}
+
 export function useRobotAccounts({name, onSuccess, onError}) {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(10);

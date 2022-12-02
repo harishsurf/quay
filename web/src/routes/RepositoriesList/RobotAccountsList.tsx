@@ -53,7 +53,7 @@ import {useRobotRepoPermissions} from 'src/hooks/UseRobotRepoPermissions';
 import RobotTokensModal from 'src/components/modals/RobotTokensModal';
 import {SearchState} from 'src/components/toolbar/SearchTypes';
 
-const RepoPermissionDropdownItems = [
+export const repoPermissionDropdownItems = [
   {
     name: 'None',
     description: 'No permissions on the repository',
@@ -420,7 +420,7 @@ export default function RobotAccountsList(props: RobotAccountsListProps) {
       handleModalToggle={() => setCreateRobotModalOpen(!isCreateRobotModalOpen)}
       namespace={props.organizationName}
       teams={teams}
-      RepoPermissionDropdownItems={RepoPermissionDropdownItems}
+      RepoPermissionDropdownItems={repoPermissionDropdownItems}
     />
   );
 
@@ -534,7 +534,7 @@ export default function RobotAccountsList(props: RobotAccountsListProps) {
             <RobotRepositoryPermissions
               robotAccount={robotForModalView}
               namespace={props.organizationName}
-              RepoPermissionDropdownItems={RepoPermissionDropdownItems}
+              RepoPermissionDropdownItems={repoPermissionDropdownItems}
               repos={robotRepos}
               selectedRepos={selectedReposForModalView}
               setSelectedRepos={setSelectedReposForModalView}

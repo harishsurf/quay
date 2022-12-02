@@ -1,4 +1,11 @@
 import {
+  Drawer,
+  DrawerActions,
+  DrawerCloseButton,
+  DrawerContent,
+  DrawerContentBody,
+  DrawerHead,
+  DrawerPanelContent,
   Page,
   PageSection,
   PageSectionVariants,
@@ -7,18 +14,25 @@ import {
   TabTitleText,
   Title,
 } from '@patternfly/react-core';
-import {useLocation, useParams, useSearchParams} from 'react-router-dom';
-import {useCallback, useState} from 'react';
+import {useParams, useSearchParams} from 'react-router-dom';
+import {useCallback, useRef, useState} from 'react';
 import RepositoriesList from 'src/routes/RepositoriesList/RepositoriesList';
 import Settings from './Tabs/Settings/Settings';
 import {QuayBreadcrumb} from 'src/components/breadcrumb/Breadcrumb';
-import { useOrganization } from 'src/hooks/UseOrganization';
-import {useOrganizations} from 'src/hooks/UseOrganizations';
+import DefaultPermissions from './Tabs/DefaultPermissions/DefaultPermissions';
+import CreatePermissionDrawer from 'src/routes/OrganizationsList/Organization/Tabs/DefaultPermissions/createPermissionDrawer/CreatePermissionDrawer';
 import RobotAccountsList from 'src/routes/RepositoriesList/RobotAccountsList';
 import {useQuayConfig} from 'src/hooks/UseQuayConfig';
+import { useOrganizations } from 'src/hooks/UseOrganizations';
+import { useOrganization } from 'src/hooks/UseOrganization';
+
+export enum DrawerContentType {
+  None,
+  CreatePermissionSpecificUser,
+}
 
 export default function Organization() {
-  const location = useLocation();
+
   const quayConfig = useQuayConfig();
   const {organizationName} = useParams();
   const {usernames} = useOrganizations();
@@ -50,6 +64,27 @@ export default function Organization() {
     }
     return false;
   }
+  const [drawerContent, setDrawerContent] = useState<DrawerContentType>(
+    DrawerContentType.None,
+  );
+
+  const closeDrawer = () => {
+    setDrawerContent(DrawerContentType.None);
+  };
+
+  const drawerRef = useRef<HTMLDivElement>();
+
+  const drawerContentOptions = {
+    [DrawerContentType.None]: null,
+    [DrawerContentType.CreatePermissionSpecificUser]: (
+      <CreatePermissionDrawer
+        orgName={organizationName}
+        closeDrawer={closeDrawer}
+        drawerRef={drawerRef}
+        drawerContent={drawerContent}
+      />
+    ),
+  };
 
   const repositoriesSubNav = [
     {
@@ -64,6 +99,16 @@ export default function Organization() {
 
     },
     {
+      name: 'Default permissions',
+      component: (
+        <DefaultPermissions
+          orgName={organizationName}
+          setDrawerContent={setDrawerContent}
+        />
+      ),
+      visible: true,
+    },
+    {
       name: 'Settings',
       component: <Settings organizationName={organizationName} />,
       visible: fetchTabVisibility('Settings'),
@@ -71,7 +116,15 @@ export default function Organization() {
   ];
 
   return (
-    <Page>
+    <Drawer
+      isExpanded={drawerContent != DrawerContentType.None}
+      onExpand={() => {
+        drawerRef.current && drawerRef.current.focus();
+      }}
+    >
+      <DrawerContent panelContent={drawerContentOptions[drawerContent]}>
+        <DrawerContentBody>
+        <Page>
       <QuayBreadcrumb />
       <PageSection
         variant={PageSectionVariants.light}
@@ -91,12 +144,15 @@ export default function Organization() {
               key={nav.name}
               eventKey={nav.name}
               title={<TabTitleText>{nav.name}</TabTitleText>}
-            >
-              {nav.component}
-            </Tab>
-          ))}
-        </Tabs>
-      </PageSection>
-    </Page>
+                  >
+                    {nav.component}
+                  </Tab>
+                ))}
+              </Tabs>
+            </PageSection>
+          </Page>
+        </DrawerContentBody>
+      </DrawerContent>
+    </Drawer>
   );
 }
