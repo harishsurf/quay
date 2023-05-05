@@ -3,7 +3,7 @@ import {
   BreadcrumbItem,
   PageBreadcrumb,
 } from '@patternfly/react-core';
-import {NavigationRoutes} from 'src/routes/NavigationPath';
+import {getNavigationRoutes} from 'src/routes/NavigationPath';
 import {Link, useParams, useLocation} from 'react-router-dom';
 import React, {useEffect, useState} from 'react';
 import useBreadcrumbs, {
@@ -19,7 +19,7 @@ export function QuayBreadcrumb() {
   const [breadcrumbItems, setBreadcrumbItems] = useState<QuayBreadcrumbItem[]>(
     [],
   );
-  const routerBreadcrumbs: BreadcrumbData[] = useBreadcrumbs(NavigationRoutes, {
+  const routerBreadcrumbs: BreadcrumbData[] = useBreadcrumbs(getNavigationRoutes(), {
     disableDefaults: true,
     excludePaths: ['/'],
   });
@@ -144,7 +144,7 @@ export function QuayBreadcrumb() {
     } else {
       buildFromRoute();
     }
-  }, []);
+  }, [window.location.pathname]);
 
   return (
     <div>

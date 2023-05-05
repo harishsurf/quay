@@ -22,6 +22,7 @@ import {CreateNewUser} from 'src/components/modals/CreateNewUser';
 import NewUserEmptyPage from 'src/components/NewUserEmptyPage';
 import axios from 'axios';
 import axiosIns from 'src/libs/axios';
+import ManageMembersList from './OrganizationsList/Organization/Tabs/TeamsAndMembership/TeamsView/ManageMembers/ManageMembersList';
 
 
 const NavigationRoutes = [
@@ -40,6 +41,10 @@ const NavigationRoutes = [
   {
     path: NavigationPath.repositoryDetail,
     Component: <RepositoryTagRouter />,
+  },
+  {
+    path: NavigationPath.teamMember,
+    Component: <ManageMembersList />,
   },
 ];
 

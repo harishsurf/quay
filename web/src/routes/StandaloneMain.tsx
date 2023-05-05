@@ -23,6 +23,10 @@ import Alerts from './Alerts';
 
 const NavigationRoutes = [
   {
+    path: NavigationPath.teamMember,
+    Component: <Organization />,
+  },
+  {
     path: NavigationPath.organizationsList,
     Component: <OrganizationsList />,
   },
@@ -48,7 +52,6 @@ export function StandaloneMain() {
 
   const quayConfig = useQuayConfig();
   const {loading, error} = useCurrentUser();
-
 
   useEffect(() => {
     if (quayConfig?.config?.REGISTRY_TITLE) {

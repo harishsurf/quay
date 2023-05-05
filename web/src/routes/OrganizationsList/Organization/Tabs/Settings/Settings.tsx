@@ -65,7 +65,7 @@ const GeneralSettings = (props: GeneralSettingsProps) => {
 
   // Time Machine
   const [timeMachineFormValue, setTimeMachineFormValue] = useState(
-    timeMachineOptions[quayConfig.config.TAG_EXPIRATION_OPTIONS[0]],
+    timeMachineOptions[quayConfig?.config?.TAG_EXPIRATION_OPTIONS[0]],
   );
   const namespaceTimeMachineExpiry = isUserOrganization ? user?.tag_expiration_s : (organization as IOrganization)?.tag_expiration_s;
 
@@ -190,7 +190,7 @@ const GeneralSettings = (props: GeneralSettingsProps) => {
           value={timeMachineFormValue}
           onChange={(val) => setTimeMachineFormValue(val)}
         >
-          {quayConfig.config.TAG_EXPIRATION_OPTIONS.map((option, index) => (
+          {quayConfig?.config?.TAG_EXPIRATION_OPTIONS.map((option, index) => (
             <FormSelectOption
               key={index}
               value={option}
