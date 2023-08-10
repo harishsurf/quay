@@ -244,6 +244,7 @@ export default function CreatePermissionDrawer(
         setAppliedTo(e);
       }}
       // onSelect={setAppliedTo}
+      value={appliedTo?.name}
       onError={() => setError('Unable to look up teams')}
       defaultOptions={appliedToDefaultOptions}
       placeholderText="Search, invite or add robot/team"

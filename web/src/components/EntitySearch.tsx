@@ -30,6 +30,15 @@ export default function EntitySearch(props: EntitySearchProps) {
     }
   }, [searchTerm, JSON.stringify(entities)]);
 
+  useEffect(()=>{
+    if(props.value !== null && props.value != undefined){
+      // TODO: should make call to entities endpoint to verify it exists
+      // before setting it to selected
+      setSearchTerm(props.value);
+      setSelectedEntityName(props.value);
+    }
+  },[props.value])
+
   useEffect(() => {
     if (isError) {
       props.onError();
@@ -86,4 +95,5 @@ interface EntitySearchProps {
   defaultOptions?: any;
   defaultSelection?: string;
   placeholderText?: string;
+  value?: string;
 }
