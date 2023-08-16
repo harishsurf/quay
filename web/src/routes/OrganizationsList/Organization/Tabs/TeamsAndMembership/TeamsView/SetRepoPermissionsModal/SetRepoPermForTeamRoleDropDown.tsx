@@ -1,5 +1,5 @@
 import {Dropdown, DropdownItem, DropdownToggle} from '@patternfly/react-core';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {ITeamRepoPerms} from 'src/hooks/UseTeams';
 import {RepoPermissionDropdownItems} from 'src/routes/RepositoriesList/RobotAccountsList';
 
@@ -13,15 +13,14 @@ export function SetRepoPermForTeamRoleDropDown(
 
   const dropdownOnSelect = (roleName) => {
     setDropdownValue(roleName);
-    props.setModifiedRepoPerms((prev) => [
-      ...prev,
-      {
-        repoName: props.repoPerm.repoName,
-        role: roleName.toLowerCase(),
-        lastModified: props.repoPerm.lastModified,
-      },
-    ]);
+    props.dropdownOnSelect(roleName, props.repoPerm);
   };
+
+  useEffect(() => {
+    if (props?.isItemSelected) {
+      dropdownOnSelect(props.selectedVal)
+    }
+  }, [props?.isItemSelected, props.selectedVal]);
 
   return (
     <Dropdown
@@ -51,5 +50,7 @@ interface SetRepoPermForTeamRoleDropDownProps {
   organizationName: string;
   teamName: string;
   repoPerm: ITeamRepoPerms;
-  setModifiedRepoPerms: React.Dispatch<React.SetStateAction<ITeamRepoPerms[]>>;
+  dropdownOnSelect: (item, repoPerm) => void;
+  isItemSelected?: boolean;
+  selectedVal: string;
 }

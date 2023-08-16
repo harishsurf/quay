@@ -21,7 +21,11 @@ import {RepoPermissionDropdownItems} from 'src/routes/RepositoriesList/RobotAcco
 export default function SetRepoPermissionsForTeamModalToolbar(
   props: SetRepoPermissionsForTeamModalToolbarProps,
 ) {
-  const dropdownOnSelect = () => {};
+  const dropdownOnSelect = (selectedVal) => {
+    props.selectedRepoPerms.map((repoPerm) => {
+      props.updateRepoPerms(selectedVal, repoPerm);
+    });
+  };
 
   return (
     <>
@@ -56,7 +60,7 @@ export default function SetRepoPermissionsForTeamModalToolbar(
                   <DropdownItem
                     key={item.name}
                     description={item.description}
-                    onClick={() => dropdownOnSelect()}
+                    onClick={() => dropdownOnSelect(item.name)}
                   >
                     {item.name}
                   </DropdownItem>
@@ -109,4 +113,5 @@ interface SetRepoPermissionsForTeamModalToolbarProps {
   children?: React.ReactNode;
   isKebabOpen: boolean;
   setKebabOpen: (open: boolean) => void;
+  updateRepoPerms: (item, repoPerm) => void;
 }

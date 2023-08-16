@@ -111,6 +111,22 @@ export default function SetRepoPermissionForTeamModal(
     return <Spinner />;
   }
 
+  const updateRepoPerms = (roleName, repoPerm) => {
+    // Remove item if already present
+    setModifiedRepoPerms((prev) =>
+      prev.filter((item) => item.repoName !== repoPerm.repoName),
+    );
+    setModifiedRepoPerms((prev) => [
+      ...prev,
+      {
+        repoName: repoPerm.repoName,
+        role: roleName,
+        lastModified: repoPerm.lastModified,
+      },
+    ]);
+  };
+
+
   const emptyPermComponent = (
     <Empty
       title="No matching repositories found"
@@ -118,6 +134,19 @@ export default function SetRepoPermissionForTeamModal(
       body="Either no repositories exist yet or you may not have permission to view any."
     />
   );
+
+  const isItemSelected = (repoPerm) => selectedRepoPerms.some(
+    (t) => t.repoName === repoPerm.repoName,
+  );
+
+  const fetchRepoPermission = (repoPerm) => {
+    for (const item of modifiedRepoPerms) {
+      if (repoPerm.repoName == item.repoName) {
+        return item.role;
+      }
+    }
+    return 'None'
+  }
 
   return (
     <Modal
@@ -164,6 +193,7 @@ export default function SetRepoPermissionForTeamModal(
           searchOptions={[setRepoPermForTeamColumnNames.repoName]}
           isKebabOpen={isKebabOpen}
           setKebabOpen={setKebabOpen}
+          updateRepoPerms={updateRepoPerms}
         >
           <TableComposable aria-label="Selectable table">
             <Thead>
@@ -182,9 +212,7 @@ export default function SetRepoPermissionForTeamModal(
                       rowIndex,
                       onSelect: (_event, isSelecting) =>
                         onSelectRepoPerm(repoPerm, rowIndex, isSelecting),
-                      isSelected: selectedRepoPerms.some(
-                        (t) => t.repoName === repoPerm.repoName,
-                      ),
+                      isSelected: isItemSelected(repoPerm),
                     }}
                   />
                   <Td dataLabel={setRepoPermForTeamColumnNames.repoName}>
@@ -195,7 +223,9 @@ export default function SetRepoPermissionForTeamModal(
                       organizationName={props.organizationName}
                       teamName={props.teamName}
                       repoPerm={repoPerm}
-                      setModifiedRepoPerms={setModifiedRepoPerms}
+                      dropdownOnSelect={updateRepoPerms}
+                      isItemSelected={isItemSelected(repoPerm)}
+                      selectedVal={fetchRepoPermission(repoPerm)}
                     />
                   </Td>
                   <Td dataLabel={setRepoPermForTeamColumnNames.lastUpdate}>
