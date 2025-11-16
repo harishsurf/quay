@@ -181,7 +181,35 @@ Choose the appropriate UI workflow based on issue type:
    - Check existing tests for similar features in `web/cypress/e2e/`
    - Review API integration patterns in `web/src/hooks/`
 
-4. **Create TodoList:**
+4. **Superuser UI: Angular vs React**
+
+## User Types and Access Control
+
+Specify which user type can access this feature and their permissions.
+
+**Quay User Types:** Superuser, Read-only Superuser, Regular user (non-superuser)
+
+**Angular UI:**
+- Separate superuser panel accessible from top-right user dropdown
+
+**React UI:**
+Superuser functionality is split across:
+
+1. **Organization List Page**
+   - Shows all superuser-viewable users/orgs alongside logged-in user's orgs
+   - **Settings column:** Superuser-only, actions vary by record type (org vs user), hidden for regular users
+
+2. **Superuser Side Nav:** Service Keys, Change Log, Usage Logs, Messages, Build Logs
+
+## Authentication Types
+
+Quay supports multiple auth methods via `AUTHENTICATION_TYPE` config: Database, OIDC, LDAP, etc.
+
+**Requirement:** Review Angular UI for each auth type's access controls, superuser actions, and password prompts. React UI must implement equivalent behavior for all authentication types.
+
+---
+
+5. **Create TodoList:**
    ```
    - Research Angular implementation (locate source code)
    - Identify PatternFly components needed
